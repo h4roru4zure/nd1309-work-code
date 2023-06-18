@@ -1,0 +1,13 @@
+const { Blockchain } = require('./simpleChain');
+const { Block } = require('./simpleChain');
+let blockchain =new Blockchain()
+bloque1 = new Block(12322)
+bloque2 = new Block(12221)
+bloque3 = new Block(12442)
+bloque4 = new Block(12543)
+blockchain.addChain(bloque1)
+blockchain.addChain(bloque2)
+blockchain.addChain(bloque3)
+blockchain.addChain(bloque4)
+blockchain.chain
+blockchain.getLatestBlock
