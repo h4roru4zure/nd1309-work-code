@@ -62,15 +62,58 @@ class Blockchain{
         return this.chain
     }
 
-    getBlock(hash) {
+    getBlockByHash(hash) {
         const block = this.chain.find(block => block.hash === hash)
         return block;
     }
+
+    getBlock(blockHeight){
+        // return object as a single string
+        return JSON.parse(JSON.stringify(this.chain[blockHeight]));
+      }
     getLatestBlock() {
         const lastIndex= this.chain.length -1
         const block=this.chain[lastIndex]
         return block
     }
+
+    validateBlock(blockHeigth){
+    //first we created a variable block and get the value througth the function getBlock    
+        let block = this.getBlock(blockHeigth)
+    //created the variable blockHash and give the value of the atributte hash of the object block    
+        let  blockHash= block.hash
+    //we clean the value of block.hash  set to the empity ''
+        block.hash =''
+    
+        let validateBlockHash = SHA256(JSON.stringify(block)).toString()
+
+        if (validateBlockHash ===blockHash){
+            return true
+        }else{
+            console.log("Block # "+ blockHeigth +" invalid hash: \n" +blockHash +'<>' + validateBlockHash)
+            return false
+        }
+    }
+
+    validateChain(){
+        let errorLog = [];
+        for (var i = 0; i < this.chain.length-1; i++) {
+          // validate block
+          if (!this.validateBlock(i))errorLog.push(i);
+          // compare blocks hash link
+          let blockHash = this.chain[i].hash;
+          let previousHash = this.chain[i+1].previousBlockHash;
+          if (blockHash!==previousHash) {
+            errorLog.push(i);
+          }
+        }
+        if (errorLog.length>0) {
+          console.log('Block errors = ' + errorLog.length);
+          console.log('Blocks: '+errorLog);
+        } else {
+          console.log('No errors detected');
+        }
+      }
 }
 
 /* ===== Blockchain ===================================
